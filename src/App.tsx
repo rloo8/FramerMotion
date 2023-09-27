@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useRef } from "react";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -7,6 +8,16 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+const BigBox = styled.div`
+  width: 600px;
+  height: 600px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 `;
 const Box = styled(motion.div)`
   width: 200px;
@@ -19,21 +30,25 @@ const Box = styled(motion.div)`
 `;
 
 const boxVariants = {
-  hover: { scale: 2, rotateZ: 90 },
-  click: { scale: 1, borderRadius: "100px" },
-  drag: { backgroundColor: "rgb(46,204,113)", transition: { duration: 2 } },
+  hover: { rotateZ: 90 },
+  click: { borderRadius: "100px" },
 };
 
 function App() {
+  const bigBoxRef = useRef<HTMLDivElement>(null);
   return (
     <Wrapper>
-      <Box
-        drag
-        variants={boxVariants}
-        whileDrag="drag"
-        whileHover="hover"
-        whileTap="click"
-      />
+      <BigBox ref={bigBoxRef}>
+        <Box
+          drag
+          dragSnapToOrigin // 드래그 후 제자리로 돌아옴
+          dragElastic={1} // 탄성력 0~1 (defalut 0.5)
+          dragConstraints={bigBoxRef}
+          variants={boxVariants}
+          whileHover="hover"
+          whileTap="click"
+        />
+      </BigBox>
     </Wrapper>
   );
 }
