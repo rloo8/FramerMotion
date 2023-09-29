@@ -1,6 +1,56 @@
 import { useRecoilState } from "recoil";
 import { goalState, roundState, timerState } from "./atom";
 import { useEffect } from "react";
+import styled from "styled-components";
+
+const Wrapper = styled.div`
+  height: 100vh;
+  width: 500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+`;
+const Title = styled.h1`
+  font-size: 50px;
+  color: white;
+  font-weight: 600;
+`;
+const TimerContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 80px;
+  color: white;
+`;
+const Box = styled.div`
+  background-color: white;
+  color: #903cda;
+  padding: 60px 30px;
+  border-radius: 10px;
+  font-weight: 600;
+`;
+const PlayBtn = styled.div`
+  width: 100px;
+`;
+const RecordBox = styled.div`
+  display: flex;
+  gap: 100px;
+`;
+const Record = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 20px;
+  strong {
+    font-size: 25px;
+    font-weight: 600;
+    color: white;
+  }
+`;
 
 function App() {
   const [timer, setTimer] = useRecoilState(timerState);
@@ -44,18 +94,57 @@ function App() {
   };
 
   return (
-    <div>
-      <h1>Pomodoro</h1>
-      <div>
-        {MM} : {SS}
-      </div>
-      <button onClick={timer.isRunning ? pauseTimer : startTimer}>
-        {timer.isRunning ? "정지" : "시작"}
-      </button>
-      <div>ROUND: {round}/4</div>
-      <div>GOAL: {goal}/4</div>
-      <div>{goal === 4 ? "FINISH!" : null}</div>
-    </div>
+    <Wrapper>
+      <Title>Pomodoro</Title>
+
+      <TimerContainer>
+        <Box>{MM}</Box>:<Box>{SS}</Box>
+      </TimerContainer>
+
+      <PlayBtn
+        style={{ width: "100px" }}
+        onClick={timer.isRunning ? pauseTimer : startTimer}
+      >
+        {timer.isRunning ? (
+          <svg
+            fill="white"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <path
+              clip-rule="evenodd"
+              fill-rule="evenodd"
+              d="M2 10a8 8 0 1116 0 8 8 0 01-16 0zm5-2.25A.75.75 0 017.75 7h.5a.75.75 0 01.75.75v4.5a.75.75 0 01-.75.75h-.5a.75.75 0 01-.75-.75v-4.5zm4 0a.75.75 0 01.75-.75h.5a.75.75 0 01.75.75v4.5a.75.75 0 01-.75.75h-.5a.75.75 0 01-.75-.75v-4.5z"
+            ></path>
+          </svg>
+        ) : (
+          <svg
+            fill="white"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <path
+              clip-rule="evenodd"
+              fill-rule="evenodd"
+              d="M2 10a8 8 0 1116 0 8 8 0 01-16 0zm6.39-2.908a.75.75 0 01.766.027l3.5 2.25a.75.75 0 010 1.262l-3.5 2.25A.75.75 0 018 12.25v-4.5a.75.75 0 01.39-.658z"
+            ></path>
+          </svg>
+        )}
+      </PlayBtn>
+
+      <RecordBox>
+        <Record>
+          <strong>ROUND</strong>
+          {round}/4
+        </Record>
+        <Record>
+          <strong>GOAL</strong>
+          {goal}/12
+        </Record>
+      </RecordBox>
+    </Wrapper>
   );
 }
 
