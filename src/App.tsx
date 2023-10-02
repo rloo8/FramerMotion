@@ -2,6 +2,7 @@ import { useRecoilState } from "recoil";
 import { goalState, roundState, timerState } from "./atom";
 import { useEffect } from "react";
 import styled from "styled-components";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -25,14 +26,14 @@ const TimerContainer = styled.div`
   font-size: 80px;
   color: white;
 `;
-const Box = styled.div`
+const Box = styled(motion.div)`
   background-color: white;
   color: #903cda;
   padding: 60px 30px;
   border-radius: 10px;
   font-weight: 600;
 `;
-const PlayBtn = styled.div`
+const PlayBtn = styled(motion.div)`
   width: 100px;
 `;
 const RecordBox = styled.div`
@@ -51,6 +52,16 @@ const Record = styled.div`
     color: white;
   }
 `;
+
+const boxVar = {
+  start: { scale: 0.7 },
+  end: {
+    scale: 1,
+    transition: {
+      type: "spring",
+    },
+  },
+};
 
 function App() {
   const [timer, setTimer] = useRecoilState(timerState);
@@ -98,11 +109,17 @@ function App() {
       <Title>Pomodoro</Title>
 
       <TimerContainer>
-        <Box>{MM}</Box>:<Box>{SS}</Box>
+        <Box variants={boxVar} initial="start" animate="end" key={MM}>
+          {MM}
+        </Box>
+        :
+        <Box variants={boxVar} initial="start" animate="end" key={SS}>
+          {SS}
+        </Box>
       </TimerContainer>
 
       <PlayBtn
-        style={{ width: "100px" }}
+        whileHover={{ scale: 1.2 }}
         onClick={timer.isRunning ? pauseTimer : startTimer}
       >
         {timer.isRunning ? (
